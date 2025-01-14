@@ -665,6 +665,9 @@ export function* initializeApplicationSaga(
       actionsToWaitFor: []
     })
   );
+
+  // TODO remove, just for testing
+  yield* put(startupLoadSuccess(StartupStatusEnum.OFFLINE));
 }
 
 /**

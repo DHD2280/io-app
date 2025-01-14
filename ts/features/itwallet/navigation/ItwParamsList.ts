@@ -7,6 +7,7 @@ import { ItwCredentialTrustmarkScreenNavigationParams } from "../trustmark/scree
 import { ITW_ROUTES } from "./routes";
 
 export type ItwParamsList = {
+  [ITW_ROUTES.WALLET]: undefined;
   [ITW_ROUTES.ONBOARDING]: undefined;
   // DISCOVERY
   [ITW_ROUTES.DISCOVERY.INFO]: undefined;
