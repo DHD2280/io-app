@@ -21,3 +21,6 @@ export const fetchNetInfoState = () =>
       error => new Error(`Error fetching net info state: ${error}`)
     )
   );
+
+export const fetchNetInfoStateOffline = () =>
+  TE.left(new Error("Simulated network disconnection"));

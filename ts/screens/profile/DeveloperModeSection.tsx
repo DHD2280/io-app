@@ -48,7 +48,7 @@ import {
 } from "../../store/reducers/persistedPreferences";
 import { clipboardSetStringWithFeedback } from "../../utils/clipboard";
 import { getDeviceId } from "../../utils/device";
-import { isDevEnv } from "../../utils/environment";
+import { isDevEnv, isLocalEnv } from "../../utils/environment";
 
 import { ITW_ROUTES } from "../../features/itwallet/navigation/routes";
 import { requestAppReview } from "../../utils/storeReview";
@@ -381,6 +381,14 @@ const PlaygroundsSection = () => {
       onPress: () =>
         navigation.navigate(ITW_ROUTES.MAIN, {
           screen: ITW_ROUTES.PLAYGROUNDS
+        })
+    },
+    {
+      condition: isLocalEnv,
+      value: "Test offline",
+      onPress: () =>
+        navigation.navigate(ROUTES.PROFILE_NAVIGATOR, {
+          screen: ROUTES.OFFLINE_DEBUG_PLAYGROUND
         })
     }
   ];

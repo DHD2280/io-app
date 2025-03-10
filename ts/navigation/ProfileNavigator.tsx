@@ -30,6 +30,7 @@ import TrialSystemPlayground from "../screens/profile/TrialSystemPlayground";
 import ProfileMainScreen from "../screens/profile/ProfileMainScreen";
 import { IOMarkdownPlayground } from "../screens/profile/playgrounds/IOMarkdownPlayground";
 import AppearancePreferenceScreen from "../screens/profile/AppearancePreferenceScreen";
+import { OfflineDebugPlayground } from "../screens/profile/playgrounds/OfflineDebugPlayground";
 import { ProfileParamsList } from "./params/ProfileParamsList";
 import ROUTES from "./routes";
 
@@ -117,6 +118,10 @@ const ProfileStackNavigator = () => (
     <Stack.Screen
       name={ROUTES.IO_MARKDOWN_PLAYGROUND}
       component={IOMarkdownPlayground}
+    />
+    <Stack.Screen
+      name={ROUTES.OFFLINE_DEBUG_PLAYGROUND}
+      component={OfflineDebugPlayground}
     />
     <Stack.Screen
       options={{

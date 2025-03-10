@@ -271,6 +271,9 @@ export function createRootReducer(
               itWallet: {
                 ...state.features.itWallet
               },
+              connectivityDebug: {
+                ...state.features.connectivityDebug
+              },
               _persist: state.features._persist
             },
             identification: {

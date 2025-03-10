@@ -72,6 +72,10 @@ import {
   loginPreferencesPersistor,
   LoginPreferencesState
 } from "../../../login/preferences/store/reducers";
+import {
+  connectivityDebugPersistor,
+  ConnectivityDebugState
+} from "../../../connectivityDebug/store/reducers";
 
 type LoginFeaturesState = {
   testLogin: TestLoginState;
@@ -101,6 +105,7 @@ export type FeaturesState = {
   landingBanners: LandingScreenBannerState;
   utmLink: UtmLinkState;
   connectivityStatus: ConnectivityState;
+  connectivityDebug: ConnectivityDebugState & PersistPartial;
 };
 
 export type PersistedFeaturesState = FeaturesState & PersistPartial;
@@ -130,7 +135,8 @@ const rootReducer = combineReducers<FeaturesState, Action>({
   ingress: ingressScreenReducer,
   landingBanners: landingScreenBannersReducer,
   utmLink: utmLinkReducer,
-  connectivityStatus: connectivityStateReducer
+  connectivityStatus: connectivityStateReducer,
+  connectivityDebug: connectivityDebugPersistor
 });
 
 const CURRENT_REDUX_FEATURES_STORE_VERSION = 1;
