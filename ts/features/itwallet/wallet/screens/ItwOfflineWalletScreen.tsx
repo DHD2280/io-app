@@ -3,6 +3,7 @@ import { IOScrollView } from "../../../../components/ui/IOScrollView";
 import I18n from "../../../../i18n";
 import { ItwWalletCardsContainer } from "../../../wallet/components/WalletCardsContainer";
 import { withOfflineAlert } from "../utils/withOfflineAlert";
+import { DebugConnectionButton } from "../../../../components/debug/DebugConnectionButton";
 
 const ItwOfflineWalletScreen = () => (
   <>
@@ -13,6 +14,7 @@ const ItwOfflineWalletScreen = () => (
     />
     <IOScrollView excludeSafeAreaMargins={true}>
       <ItwWalletCardsContainer />
+      <DebugConnectionButton />
     </IOScrollView>
   </>
 );

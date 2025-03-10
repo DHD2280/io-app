@@ -5,3 +5,6 @@ export const isDebugConnectedSelector = (state: GlobalState) =>
 
 export const isActiveDebugConnectionSelector = (state: GlobalState) =>
   state.features.connectivityDebug.isActive;
+
+export const connectivityDebugSelector = (state: GlobalState) =>
+  state.features.connectivityDebug;

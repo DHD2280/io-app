@@ -105,6 +105,9 @@ import { ReduxSagaEffect, SagaCallReturnType } from "../types/utils";
 import { trackKeychainFailures } from "../utils/analytics";
 import { isTestEnv } from "../utils/environment";
 import { deletePin, getPin } from "../utils/keychain";
+import { isConnectedSelector } from "../features/connectivity/store/selectors";
+import { itwLifecycleIsOperationalOrValid } from "../features/itwallet/lifecycle/store/selectors";
+import { isItwOfflineAccessEnabledSelector } from "../store/reducers/persistedPreferences";
 import { startAndReturnIdentificationResult } from "./identification";
 import { previousInstallationDataDeleteSaga } from "./installation";
 import {
@@ -225,6 +228,25 @@ export function* initializeApplicationSaga(
     return;
   }
   // #LOLLIPOP_CHECK_BLOCK1_END
+
+  // fix of this PR -> https://github.com/pagopa/io-app/pull/6767
+  // Inserted here to make the flow work,
+  // however it will also be carried over to master
+  const selectItwLifecycleIsOperationalOrValid = yield* select(
+    itwLifecycleIsOperationalOrValid
+  );
+  const isOfflineAccessEnabled = yield* select(
+    isItwOfflineAccessEnabledSelector
+  );
+  const isConnected = yield* select(isConnectedSelector);
+
+  if (
+    !isConnected &&
+    selectItwLifecycleIsOperationalOrValid &&
+    isOfflineAccessEnabled
+  ) {
+    return;
+  }
 
   // Since the backend.json is done in parallel with the startup saga,
   // we need to synchronize the two tasks, to be sure to have loaded the remote FF

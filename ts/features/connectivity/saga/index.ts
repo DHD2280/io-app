@@ -1,11 +1,17 @@
 import * as E from "fp-ts/lib/Either";
-import { call, fork, put, select } from "typed-redux-saga/macro";
+import { call, fork, put, select, take } from "typed-redux-saga/macro";
 import { Millisecond } from "@pagopa/ts-commons/lib/units";
+import { REHYDRATE } from "redux-persist";
 import { configureNetInfo, fetchNetInfoState } from "../utils";
 import { startTimer } from "../../../utils/timer";
 import { setConnectionStatus } from "../store/actions";
 import { ReduxSagaEffect, SagaCallReturnType } from "../../../types/utils";
 import { isConnectedSelector } from "../store/selectors";
+import {
+  connectivityDebugSelector,
+  isActiveDebugConnectionSelector,
+  isDebugConnectedSelector
+} from "../../connectivityDebug/store/selectors";
 
 const CONNECTIVITY_STATUS_LOAD_INTERVAL = (60 * 1000) as Millisecond;
 const CONNECTIVITY_STATUS_FAILURE_INTERVAL = (10 * 1000) as Millisecond;
@@ -19,10 +25,18 @@ export function* connectionStatusSaga(): Generator<
   SagaCallReturnType<typeof fetchNetInfoState>
 > {
   try {
+    const isActiveDebugConnection = yield* select(
+      isActiveDebugConnectionSelector
+    );
     const response = yield* call(fetchNetInfoState());
-    if (E.isRight(response)) {
+    if (E.isRight(response) && !isActiveDebugConnection) {
       yield* put(setConnectionStatus(response.right.isConnected === true));
       return true;
+    }
+    if (isActiveDebugConnection) {
+      const isDebugConnected = yield* select(isDebugConnectedSelector);
+      yield* put(setConnectionStatus(isDebugConnected));
+      return isDebugConnected;
     }
     return false;
   } catch (e) {
@@ -61,6 +75,15 @@ export function* connectionStatusWatcherLoop() {
 
 export default function* root(): IterableIterator<ReduxSagaEffect> {
   // configure net info library to check status and fetch a specific url
+  while (true) {
+    const connectivityDebug = yield* select(connectivityDebugSelector);
+    // eslint-disable-next-line no-underscore-dangle
+    if (connectivityDebug?._persist.rehydrated) {
+      break; // Exit the loop if Redux Persist has finished
+    }
+    yield* take(REHYDRATE); // Keep listening to the event
+  }
+
   configureNetInfo();
   yield* fork(connectionStatusWatcherLoop);
 }

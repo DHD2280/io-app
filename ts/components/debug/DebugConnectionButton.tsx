@@ -27,10 +27,6 @@ export const DebugConnectionButton = () => {
     ? "Disabilita Connessione"
     : "Abilita Connessione";
 
-  const buttonOutlineText = isActiveDebugConnection
-    ? "Usa la connessione del device"
-    : "Usa la connessione di debug";
-
   const changeConnctivityValue = useCallback(() => {
     dispatch(setDebugConnectionStatus(!isDebugConnected));
   }, [dispatch, isDebugConnected]);
@@ -49,8 +45,8 @@ export const DebugConnectionButton = () => {
         />
         <VSpacer />
         <ButtonOutline
-          label={buttonOutlineText}
-          accessibilityLabel={buttonOutlineText}
+          label="Usa la connessione del device"
+          accessibilityLabel="Usa la connessione del device"
           onPress={changeConnection}
         />
       </>
