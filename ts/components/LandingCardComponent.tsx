@@ -3,7 +3,7 @@
  */
 
 import { forwardRef } from "react";
-import { View, ScrollView, useWindowDimensions } from "react-native";
+import { View, ScrollView, useWindowDimensions, Pressable } from "react-native";
 import {
   Body,
   H3,
@@ -20,6 +20,7 @@ type Props = {
   content: string;
   accessibilityLabel?: string;
   accessibilityHint?: string;
+  onSkipToButtons: () => void;
 };
 
 const VERTICAL_SPACING = 16;
@@ -32,7 +33,8 @@ export const LandingCardComponent = forwardRef<View, Props>((props, ref) => {
     accessibilityHint,
     pictogramName,
     title,
-    content
+    content,
+    onSkipToButtons
   } = props;
 
   return (
@@ -40,30 +42,32 @@ export const LandingCardComponent = forwardRef<View, Props>((props, ref) => {
       accessible={false}
       contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
     >
-      <View
-        ref={ref}
-        style={[
-          {
-            width: screenWidth
-          },
-          IOStyles.horizontalContentPadding,
-          IOStyles.alignCenter
-        ]}
-        accessible={true}
-        accessibilityLabel={accessibilityLabel}
-        accessibilityHint={accessibilityHint}
-      >
-        <Pictogram size={180} name={pictogramName} />
-        <VSpacer size={VERTICAL_SPACING} />
-        <H3 importantForAccessibility="no" style={{ textAlign: "center" }}>
-          {title}
-        </H3>
-        <VSpacer size={VERTICAL_SPACING} />
-        <Body importantForAccessibility="no" style={{ textAlign: "center" }}>
-          {content}
-        </Body>
-        <VSpacer size={VERTICAL_SPACING} />
-      </View>
+      <Pressable onPress={onSkipToButtons} accessible={false}>
+        <View
+          ref={ref}
+          style={[
+            {
+              width: screenWidth
+            },
+            IOStyles.horizontalContentPadding,
+            IOStyles.alignCenter
+          ]}
+          accessible={true}
+          accessibilityLabel={accessibilityLabel}
+          accessibilityHint={accessibilityHint}
+        >
+          <Pictogram size={180} name={pictogramName} />
+          <VSpacer size={VERTICAL_SPACING} />
+          <H3 importantForAccessibility="no" style={{ textAlign: "center" }}>
+            {title}
+          </H3>
+          <VSpacer size={VERTICAL_SPACING} />
+          <Body importantForAccessibility="no" style={{ textAlign: "center" }}>
+            {content}
+          </Body>
+          <VSpacer size={VERTICAL_SPACING} />
+        </View>
+      </Pressable>
     </ScrollView>
   );
 });

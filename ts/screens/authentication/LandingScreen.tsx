@@ -87,6 +87,7 @@ export const LandingScreen = () => {
     isCieIDTourGuideEnabledSelector
   );
   const accessibilityFirstFocuseViewRef = useRef<View>(null);
+  const cieButtonFocus = useRef<View>(null);
   const {
     navigateToIdpSelection,
     navigateToCiePinInsertion,
@@ -269,6 +270,10 @@ export const LandingScreen = () => {
       contextualHelpMarkdown
     });
 
+    const onSkipToButtons = () => {
+      setAccessibilityFocus(cieButtonFocus);
+    };
+
     const { name: routeName } = useRoute();
 
     const carouselCards: ReadonlyArray<
@@ -287,7 +292,8 @@ export const LandingScreen = () => {
           )}`,
           accessibilityHint: I18n.t(
             "authentication.landing.accessibility.carousel.hint"
-          )
+          ),
+          onSkipToButtons
         },
         {
           id: 1,
@@ -296,7 +302,8 @@ export const LandingScreen = () => {
           content: I18n.t("authentication.landing.card1-content"),
           accessibilityLabel: `${I18n.t(
             "authentication.landing.card1-title"
-          )}. ${I18n.t("authentication.landing.card1-content")}`
+          )}. ${I18n.t("authentication.landing.card1-content")}`,
+          onSkipToButtons
         },
         {
           id: 2,
@@ -305,7 +312,8 @@ export const LandingScreen = () => {
           content: I18n.t("authentication.landing.card2-content"),
           accessibilityLabel: `${I18n.t(
             "authentication.landing.card2-title"
-          )}. ${I18n.t("authentication.landing.card2-content")}`
+          )}. ${I18n.t("authentication.landing.card2-content")}`,
+          onSkipToButtons
         },
         {
           id: 3,
@@ -314,7 +322,8 @@ export const LandingScreen = () => {
           content: I18n.t("authentication.landing.card3-content"),
           accessibilityLabel: `${I18n.t(
             "authentication.landing.card3-title"
-          )}. ${I18n.t("authentication.landing.card3-content")}`
+          )}. ${I18n.t("authentication.landing.card3-content")}`,
+          onSkipToButtons
         },
         {
           id: 4,
@@ -323,7 +332,8 @@ export const LandingScreen = () => {
           content: I18n.t("authentication.landing.card4-content"),
           accessibilityLabel: `${I18n.t(
             "authentication.landing.card4-title"
-          )}. ${I18n.t("authentication.landing.card4-content")}`
+          )}. ${I18n.t("authentication.landing.card4-content")}`,
+          onSkipToButtons
         }
       ],
       []
@@ -373,6 +383,7 @@ export const LandingScreen = () => {
             content={I18n.t("authentication.landing.tour_guide.content")}
           >
             <ButtonSolid
+              ref={cieButtonFocus}
               testID="landing-button-login-cie"
               accessibilityLabel={I18n.t("authentication.landing.loginCie")}
               fullWidth
