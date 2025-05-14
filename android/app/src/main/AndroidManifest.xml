@@ -59,13 +59,13 @@
       </intent-filter>
     </receiver>
 
-    <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService" android:exported="false">
-      <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT" />
-      </intent-filter>
-    </service>
-    <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_notification" />
-    <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="@string/default_notification_channel_id" />
+<!--    <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService" android:exported="false">-->
+<!--      <intent-filter>-->
+<!--        <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--      </intent-filter>-->
+<!--    </service>-->
+<!--    <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_notification" />-->
+<!--    <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="@string/default_notification_channel_id" />-->
 
 
     <!-- END Required by react-native-push-notification -->
@@ -82,11 +82,11 @@
     <meta-data android:name="com.mixpanel.android.MPConfig.DisableEmulatorBindingUI" android:value="true" />
 
     <!-- START Required by mixpanel push notification -->
-    <service android:name="com.mixpanel.android.mpmetrics.MixpanelFCMMessagingService" android:enabled="true" android:exported="false">
-      <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-      </intent-filter>
-    </service>
+<!--    <service android:name="com.mixpanel.android.mpmetrics.MixpanelFCMMessagingService" android:enabled="true" android:exported="false">-->
+<!--      <intent-filter>-->
+<!--        <action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
+<!--      </intent-filter>-->
+<!--    </service>-->
 
     <!-- END Required by mixpanel push notification  -->
 
