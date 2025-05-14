@@ -13,7 +13,6 @@ import {
 } from "@pagopa/io-app-design-system";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import * as O from "fp-ts/lib/Option";
-import JailMonkey from "jail-monkey";
 import {
   ComponentProps,
   useCallback,
@@ -209,7 +208,7 @@ export const LandingScreen = () => {
   );
 
   useOnFirstRender(() => {
-    const isRootedOrJailbrokenFromJailMonkey = JailMonkey.isJailBroken();
+    const isRootedOrJailbrokenFromJailMonkey = false;
     setIsRootedOrJailbroken(O.some(isRootedOrJailbrokenFromJailMonkey));
     if (isSessionExpired) {
       // eslint-disable-next-line functional/immutable-data
