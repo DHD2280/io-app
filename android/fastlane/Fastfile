@@ -55,7 +55,7 @@ platform :android do
     gradle(
       task: "bundle",
       flavor: "canary",
-      build_type: "Release",
+      build_type: "Debug",
       # flags: "-x bundleReleaseJsAndAssets --no-daemon"
     )
   end
