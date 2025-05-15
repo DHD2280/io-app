@@ -185,11 +185,68 @@ jobs:
           path: definitions/
       - id: setup-ruby
         uses: ruby/setup-ruby@401c19e14f474b54450cd3905bb8b86e2c8509cf #v1.204.0
+        with:
+          bundler-cache: true
+      - id: prepare-ios-build
+        run: ./scripts/ios-release-build.sh
+        env:
+          APP_STORE_API_KEY_ID: ${{secrets.APP_STORE_API_KEY_ID}}
+          APP_STORE_API_PRIVATE_KEY: ${{secrets.APP_STORE_API_PRIVATE_KEY}}
+          ENCODED_IO_APP_SENTRY_PROPERTIES: ${{secrets.ENCODED_IO_APP_SENTRY_PROPERTIES}}
+      - id: add-ssh-deploy-key
+        run: |
+          echo -e "Host github.com
+            AddKeysToAgent yes
+            IdentityFile ~/.ssh/id_ed25519" > ~/.ssh/config
+          echo -e "$SSH_DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 400 ~/.ssh/id_ed25519
+          ssh-add ~/.ssh/id_ed25519
+        env:
+          SSH_DEPLOY_KEY: ${{secrets.SSH_CERTS_DEPLOY_KEY}}
+      - id: build-upload-app-store
+        name: Build & submit to App store
+        run: |
+          cd ios
+          bundle exec fastlane canary_ci_testflight
+        env:
+          LC_ALL: en_US.UTF-8
+          LANG: en_US.UTF-8
+          RUBYOPT: '-rostruct' # TODO: Remove when https://github.com/fastlane/fastlane/pull/21950 gets released
+          APP_STORE_API_KEY_ID: ${{secrets.APP_STORE_API_KEY_ID}}
+          APP_STORE_API_PRIVATE_KEY: ${{secrets.APP_STORE_API_PRIVATE_KEY}}
+          APP_STORE_API_KEY_ISSUER_ID: ${{secrets.APP_STORE_API_KEY_ISSUER_ID}}
+          ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD: ${{secrets.ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD}}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      - id: upload-dsym-files
+        # Sometimes the build-upload-app-store step fails for timeout,
+        # in this case we want to upload the dSYM files anyway
+        if: ${{ always() }} 
+        # We don't want to fail whole job if the dSYM upload step fails
+        continue-on-error: true 
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.0.3
+        with:
+          name: IO.app.dSYM.zip
+          path: ios/IO.app.dSYM.zip
+      - id: upload-ipa
+        # We don't want to fail whole job if the IPA upload step fails
+        continue-on-error: true
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
+        with:
+          name: IO.ipa
+          path: ios/IO.ipa
+      - id: upload-ipa-release
+        continue-on-error: true
+        run: |
+          APP_VERSION=$(node -p -e "require('./package.json').version")
+          gh release upload $APP_VERSION ios/IO.ipa#IO-canary-iOS.ipa
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   notify-new-version:
     runs-on: ubuntu-latest
     needs:
         - prepare-canary-release
         - release-android
+        - release-ios
     steps:
       - id: checkout
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab #v3.5.2
